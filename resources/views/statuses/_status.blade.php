@@ -6,9 +6,12 @@
     <a href="{{ route('users.show', $user->id )}}">{{ $user->name }}</a>
   </span>
     <span class="timestamp">
+
+      {{--将日期进行友好化处理--}}
     {{ $status->created_at->diffForHumans() }}
   </span>
     <span class="content">{{ $status->content }}</span>
+  {{--按钮必须是微博的作者本人才能看到，利用 Laravel 授权策略提供的 @can Blade 命令，在 Blade 模板中做授权判断。--}}
     @can('destroy', $status)
         <form action="{{ route('statuses.destroy', $status->id) }}" method="POST">
             {{ csrf_field() }}

@@ -19,7 +19,8 @@ class StatusesController extends Controller
         $this->validate($request, [
             'content' => 'required|max:140',
         ]);
-
+//        Laravel 提供的 Auth::user() 方法可以获取到当前用户实例
+//        创建的微博会自动与用户进行关联
         Auth::user()->statuses()->create([
             'content' => $request['content'],
         ]);
