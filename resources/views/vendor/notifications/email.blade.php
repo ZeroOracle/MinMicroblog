@@ -45,7 +45,7 @@
     @if (! empty($salutation))
         {{ $salutation }}
     @else
-        Regards,<br>{{ config('app.name') }}
+        来自,<br>{{ config('app.name') }}
     @endif
 
     {{-- Subcopy --}}
