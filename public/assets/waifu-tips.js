@@ -2,7 +2,7 @@ String.prototype.render = function (context) {
     var tokenReg = /(\\)?\{([^\{\}\\]+)(\\)?\}/g;
 
     return this.replace(tokenReg, function (word, slash1, token, slash2) {
-        if (slash1 || slash2) {  
+        if (slash1 || slash2) {
             return word.replace('\\', '');
         }
 
@@ -68,7 +68,7 @@ $('.waifu-tool .fui-photo').click(function (){
     var text;
     //var SiteIndexUrl = 'https://www.fghrsh.net/';  // 手动指定主页
     var SiteIndexUrl = window.location.protocol+'//'+window.location.hostname+'/';  // 自动获取主页
-    
+
     if (window.location.href == SiteIndexUrl) {      // 如果是主页
         var now = (new Date()).getHours();
         if (now > 23 || now <= 5) {
@@ -156,9 +156,9 @@ function showMessage(text, timeout, flag){
     if(flag || sessionStorage.getItem('waifu-text') === '' || sessionStorage.getItem('waifu-text') === null){
         if(Array.isArray(text)) text = text[Math.floor(Math.random() * text.length + 1)-1];
         //console.log(text);
-        
+
         if(flag) sessionStorage.setItem('waifu-text', text);
-        
+
         $('.waifu-tips').stop();
         $('.waifu-tips').html(text).fadeTo(200, 1);
         if (timeout === undefined) timeout = 5000;
@@ -174,20 +174,20 @@ function hideMessage(timeout){
 }
 
 function initModel(waifuPath){
-    
+
     if (waifuPath === undefined) waifuPath = '';
     var modelId = localStorage.getItem('modelId');
     var modelTexturesId = localStorage.getItem('modelTexturesId');
-    
+
     if (modelId == null) {
-        
+
         /* 首次访问加载 指定模型 的 指定材质 */
-        
+
         var modelId = 1;            // 模型 ID
         var modelTexturesId = 53    // 材质 ID
-        
+
     } loadModel(modelId, modelTexturesId);
-	
+
 	$.ajax({
         cache: true,
         url: waifuPath+'waifu-tips.json',
@@ -213,8 +213,8 @@ function initModel(waifuPath){
                 var now = new Date();
                 var after = tips.date.split('-')[0];
                 var before = tips.date.split('-')[1] || after;
-                
-                if((after.split('/')[0] <= now.getMonth()+1 && now.getMonth()+1 <= before.split('/')[0]) && 
+
+                if((after.split('/')[0] <= now.getMonth()+1 && now.getMonth()+1 <= before.split('/')[0]) &&
                    (after.split('/')[1] <= now.getDate() && now.getDate() <= before.split('/')[1])){
                     var text = tips.text;
                     if(Array.isArray(tips.text)) text = tips.text[Math.floor(Math.random() * tips.text.length + 1)-1];
@@ -230,18 +230,18 @@ function loadModel(modelId, modelTexturesId){
     localStorage.setItem('modelId', modelId);
     if (modelTexturesId === undefined) modelTexturesId = 0;
     localStorage.setItem('modelTexturesId', modelTexturesId);
-    loadlive2d('live2d', 'https://api.fghrsh.net/live2d/get/?id='+modelId+'-'+modelTexturesId, console.log('live2d','模型 '+modelId+'-'+modelTexturesId+' 加载完成'));
+    loadlive2d('live2d', 'live2d/get/?id='+modelId+'-'+modelTexturesId, console.log('live2d','模型 '+modelId+'-'+modelTexturesId+' 加载完成'));
 }
 
 function loadRandModel(){
     var modelId = localStorage.getItem('modelId');
     var modelTexturesId = localStorage.getItem('modelTexturesId');
-    
+
     var modelTexturesRandMode = 'rand';     // 可选 'rand'(随机), 'switch'(顺序)
-    
+
     $.ajax({
         cache: false,
-        url: 'https://api.fghrsh.net/live2d/'+modelTexturesRandMode+'_textures/?id='+modelId+'-'+modelTexturesId,
+        url: 'live2d/'+modelTexturesRandMode+'_textures/?id='+modelId+'-'+modelTexturesId,
         dataType: "json",
         success: function (result){
             if (result.textures['id'] == 1 && (modelTexturesId == 1 || modelTexturesId == 0)) {
@@ -256,12 +256,12 @@ function loadRandModel(){
 
 function loadOtherModel(){
     var modelId = localStorage.getItem('modelId');
-    
+
     var modelTexturesRandMode = 'switch';     // 可选 'rand'(随机), 'switch'(顺序)
-    
+
     $.ajax({
         cache: false,
-        url: 'https://api.fghrsh.net/live2d/'+modelTexturesRandMode+'/?id='+modelId,
+        url: 'live2d/'+modelTexturesRandMode+'/?id='+modelId,
         dataType: "json",
         success: function (result){
             loadModel(result.model['id']);
